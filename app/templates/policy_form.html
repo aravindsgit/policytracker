@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field %}
+{% block title %}{{ title }} · Policy Tracker{% endblock %}
+{% block content %}
+<section class="narrow">
+  <h1>{{ title }}</h1>
+  <p class="meta">Client: <a href="/clients/{{ client.id }}">{{ client.name }}</a></p>
+  <form method="post">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    {{ field("policy_number", "Policy number", values, errors) }}
+    {{ field("type", "Policy type", values, errors, list="types") }}
+    <datalist id="types"><option value="Life"><option value="Health"><option value="Motor"><option value="Home"><option value="Travel"></datalist>
+    {{ field("insurer", "Insurer", values, errors) }}
+    {{ field("premium", "Premium", values, errors, type="number", step="0.01") }}
+    {{ field("start_date", "Start date", values, errors, type="date") }}
+    {{ field("end_date", "End date", values, errors, type="date") }}
+    <div class="field">
+      <label for="status">Status</label>
+      <select id="status" name="status">
+        {% for s in statuses %}<option value="{{ s }}"{% if values.get("status") == s %} selected{% endif %}>{{ s|capitalize }}</option>{% endfor %}
+      </select>
+      {% if errors.get("status") %}<p class="err">{{ errors["status"] }}</p>{% endif %}
+    </div>
+    <div class="field">
+      <label for="notes">Notes (optional)</label>
+      <textarea id="notes" name="notes" rows="3">{{ values.get("notes", "") }}</textarea>
+      {% if errors.get("notes") %}<p class="err">{{ errors["notes"] }}</p>{% endif %}
+    </div>
+    <button class="primary">Save policy</button>
+    <a href="/clients/{{ client.id }}">Cancel</a>
+  </form>
+  {% if title == "Edit policy" %}
+  <form method="post" action="/policies/{{ request.path_params.policy_id }}/delete" onsubmit="return confirm('Delete this policy?')">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <button class="danger">Delete policy</button>
+  </form>
+  {% endif %}
+</section>
+{% endblock %}

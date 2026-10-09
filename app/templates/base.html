@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Policy Tracker{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+{% if user %}
+<header class="top">
+  <a class="brand" href="/clients">Policy Tracker</a>
+  <nav aria-label="Main">
+    <a href="/clients">Clients</a>
+    <a href="/policies">Policies</a>
+    <a href="/renewals">Renewals</a>
+  </nav>
+  <form method="post" action="/logout">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <button class="link">Log out</button>
+  </form>
+</header>
+{% endif %}
+<main>
+  {% if flash %}<p class="flash" role="status">{{ flash }}</p>{% endif %}
+  {% block content %}{% endblock %}
+</main>
+</body>
+</html>

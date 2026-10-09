@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Renewals · Policy Tracker{% endblock %}
+{% block content %}
+<h1>Renewals due in the next {{ days }} days</h1>
+{% if policies %}
+<div class="scroll"><table>
+  <thead><tr><th>Ends</th><th class="num">Days left</th><th>Client</th><th>Policy number</th><th>Type</th><th>Insurer</th><th class="num">Premium</th></tr></thead>
+  <tbody>
+  {% for p in policies %}
+    {% set left = (p.end_date - today).days %}
+    <tr>
+      <td>{{ p.end_date }}</td><td class="num{% if left <= 7 %} soon{% endif %}">{{ left }}</td>
+      <td><a href="/clients/{{ p.client_id }}">{{ p.client.name }}</a></td>
+      <td><a href="/policies/{{ p.id }}/edit">{{ p.policy_number }}</a></td>
+      <td>{{ p.type }}</td><td>{{ p.insurer }}</td><td class="num">{{ "%.2f"|format(p.premium) }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% else %}
+<p class="empty">No active policies end in the next {{ days }} days.</p>
+{% endif %}
+{% endblock %}

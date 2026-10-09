@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Clients · Policy Tracker{% endblock %}
+{% block content %}
+<div class="bar">
+  <h1>Clients</h1>
+  <a class="button primary" href="/clients/new">Add client</a>
+</div>
+<form class="filters" method="get" action="/clients">
+  <label for="q">Search by name or email</label>
+  <input id="q" name="q" value="{{ q }}">
+  <button>Search</button>
+</form>
+{% if clients %}
+<div class="scroll"><table>
+  <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th class="num">Policies</th></tr></thead>
+  <tbody>
+  {% for c in clients %}
+    <tr><td><a href="/clients/{{ c.id }}">{{ c.name }}</a></td><td>{{ c.email }}</td><td>{{ c.phone }}</td><td class="num">{{ c.policies|length }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% elif q %}
+<p class="empty">No clients match "{{ q }}". Try a shorter search.</p>
+{% else %}
+<p class="empty">No clients yet. Add your first client to start tracking policies.</p>
+{% endif %}
+{% endblock %}

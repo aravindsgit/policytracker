@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field %}
+{% block title %}{{ title }} · Policy Tracker{% endblock %}
+{% block content %}
+<section class="narrow">
+  <h1>{{ title }}</h1>
+  <form method="post">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    {{ field("name", "Name", values, errors) }}
+    {{ field("email", "Email (optional)", values, errors, type="email") }}
+    {{ field("phone", "Phone (optional)", values, errors, type="tel") }}
+    <button class="primary">Save client</button>
+    <a href="/clients">Cancel</a>
+  </form>
+</section>
+{% endblock %}

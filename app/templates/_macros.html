@@ -1,0 +1,7 @@
+{% macro field(name, label, values, errors, type="text", list=None, step=None) %}
+<div class="field">
+  <label for="{{ name }}">{{ label }}</label>
+  <input id="{{ name }}" name="{{ name }}" type="{{ type }}" value="{{ values.get(name, '') }}"{% if list %} list="{{ list }}"{% endif %}{% if step %} step="{{ step }}"{% endif %}{% if errors.get(name) %} aria-invalid="true" aria-describedby="{{ name }}-err"{% endif %}>
+  {% if errors.get(name) %}<p class="err" id="{{ name }}-err">{{ errors[name] }}</p>{% endif %}
+</div>
+{% endmacro %}
